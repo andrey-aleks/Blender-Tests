@@ -10,4 +10,3 @@ for subdivs in range(4):
         bpy.ops.object.mode_set(mode = 'OBJECT')
     else:
         break
-#test
