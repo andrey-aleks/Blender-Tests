@@ -1,11 +1,11 @@
 import bpy
 
-coll_from = bpy.data.collections['Collection 1']
-coll_to = bpy.data.collections['Collection 2']
+coll_from = bpy.data.collections['Collection 2']
+coll_to = bpy.data.collections['Collection 1']
 
 temp_coll = []
 
-for ob in coll_from:
+for ob in coll_from.objects:
     try:
         coll_to.objects.link(ob)
     except RuntimeError:
