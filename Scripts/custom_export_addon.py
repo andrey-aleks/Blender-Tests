@@ -9,28 +9,47 @@ import os
 import bpy
 import pathlib
 
+def import_files(context, import_fname):
+    abspath = bpy.path.abspath(context.scene.import_path)
+    import_path = pathlib.Path(abspath)        
+    for import_fpath in import_path.glob(str(import_fname)):
+        bpy.ops.import_scene.fbx(filepath=str(import_fpath))
+        for imported_fbx in context.selected_objects:
+            imported_fbx.import_fname = import_fpath.name
+
+class IMPORT_SCENE_OT_importer(bpy.types.Operator):
+    bl_idname = 'import_scene.fbx_custom'
+    bl_label = "Import FBX"
+
+    def execute(self, context):
+
+        abspath = bpy.path.abspath(context.scene.export_fname)
+        export_path = pathlib.Path(abspath)        
+        bpy.ops.import_scene.fbx(filepath=str(export_path))
+        return {'FINISHED'}
+
+
 class EXPORT_SCENE_OT_custom_export(bpy.types.Operator):
     bl_idname = 'export_scene.fbx_custom'
-    bl_label = 'Custom Export'
+    bl_label = 'Export FBX'
 
     def execute(self, context):
 
         export_obs = context.selected_objects
         if export_obs:
-            for ob in export_obs:
-                bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+            bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+            abspath = bpy.path.abspath(context.scene.export_fname)
+            export_path = pathlib.Path(abspath) 
+            bpy.ops.export_scene.fbx(filepath=str(export_path), use_selection=True, object_types={'MESH'}, bake_space_transform=True, bake_anim=False)
+            return {'FINISHED'}
         else:
             return {'CANCELLED'}
 
-        # abspath = bpy.path.abspath(context.scene.export_path)
-        # export_path = pathlib.Path(abspath)
 
-        target_file = os.path.join(context.scene.export_path, context.scene.export_fname)
-        bpy.ops.export_scene.fbx(filepath=target_file, use_selection=True, object_types={'MESH'}, bake_space_transform=True, bake_anim=False)
 
-        return {'FINISHED'}
 
-class EXPORT_SCENE_PT_custom_export(bpy.types.Panel):
+
+class VIEW3D_PT_custom_export(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'Tools'
@@ -38,13 +57,16 @@ class EXPORT_SCENE_PT_custom_export(bpy.types.Panel):
 
     def draw(self, context):
         col = self.layout
-
+        col.prop(context.scene, 'export_fname')
+        col.operator('import_scene.fbx_custom')
+        col = self.layout
         col.operator('export_scene.fbx_custom')
 
 
 
 blender_classes = [
-    EXPORT_SCENE_PT_custom_export,
+    VIEW3D_PT_custom_export,
+    IMPORT_SCENE_OT_importer,
     EXPORT_SCENE_OT_custom_export,
 ]
 
@@ -60,6 +82,7 @@ def register():
 
     bpy.types.Scene.export_fname = bpy.props.StringProperty(
         name = "FBX Filename",
+        subtype='FILE_PATH',
     )
 
     for blender_class in blender_classes:
