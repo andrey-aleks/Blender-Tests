@@ -18,8 +18,11 @@ class Random_Heigher_OT(bpy.types.Operator):
 
     def execute(self, context):
         objects = bpy.context.selected_objects
+        amount = objects.count(objects)
         for obj in objects:
-            obj.location[2] += random.uniform(context.scene.min_shift, context.scene.max_shift)
+            obj.location[2] -= amount * context.scene.shift
+            amount -= 1
+            #obj.location[2] += random.uniform(context.scene.min_shift, context.scene.max_shift)
             mod = obj.modifiers.get("Solidify")
             if mod is None:
                 mod = obj.modifiers.new("Solidify", 'SOLIDIFY')
@@ -36,8 +39,8 @@ class VIEW3D_PT_Random_Heigher(bpy.types.Panel):
     def draw(self, context):
         col = self.layout.column()
 
-        col.prop(bpy.context.scene, 'min_shift')
-        col.prop(bpy.context.scene, 'max_shift')
+        col.prop(bpy.context.scene, 'shift')
+        #col.prop(bpy.context.scene, 'max_shift')
         col.operator('mesh.random_heigher', text='RandomHeigher')
 
         
@@ -55,12 +58,12 @@ def register():
     for blender_class in blender_classes:
         bpy.utils.register_class(blender_class)
 
-    bpy.types.Scene.min_shift = bpy.props.FloatProperty(name="min_shift", default=0.1)
-    bpy.types.Scene.max_shift = bpy.props.FloatProperty(name="max_shift", default=1)
+    bpy.types.Scene.shift = bpy.props.FloatProperty(name="Shift", default=1)
+    #bpy.types.Scene.max_shift = bpy.props.FloatProperty(name="max_shift", default=1)
 
 
 def unregister():
     for blender_class in blender_classes:
         bpy.utils.unregister_class(blender_class)
-    del bpy.types.Scene.min_shift
-    del bpy.types.Scene.max_shift
+    del bpy.types.Scene.shift
+    #del bpy.types.Scene.max_shift
