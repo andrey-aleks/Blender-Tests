@@ -1,39 +1,23 @@
 bl_info = {
-    "name": "SortMod",
+    "name": "RandomHeigher",
     "version": (1, 0, 6),
     "blender": (2, 80, 3),
     "author": "Andrey Alekseev <andrey.aleks00@gmail.com>",
-    "location": "3D-viewport -> N-panel -> Tool -> Custom Import/Export",
-    "description": "Allows you to import some FBX, do some changes and rewrite this FBX at one click",
-    "warning": "Works only with FBX",
+    "location": "3D-viewport -> N-panel -> Tool -> RandomHeigher",
+    "description": "Adds different value on Z-axis to selected objects (SO); adds Solidify to SO",
     "category": "Object",
 }
 import bpy
 import random
 
 
-class SORT_MOD_OT_sort_mod(bpy.types.Operator):
-    bl_idname = 'mesh.sort_mod'
-    bl_label = "Sort_Mod"
+class Random_Heigher_OT(bpy.types.Operator):
+    bl_idname = 'mesh.random_heigher'
+    bl_label = "RandomHeigher"
     bl_options = {'REGISTER', 'UNDO'}
-
-    min_shift = bpy.props.FloatProperty(
-        name = "Min shift",
-        description = "Min shift on Z-axis",
-        default=0.1,
-        soft_min = -100, soft_max = 100,
-    )
-
-    max_shift = bpy.props.FloatProperty(
-        name = "Max shift",
-        description = "Max shift on Z-axis",
-        default=1,
-        soft_min = -100, soft_max = 100,
-    )
 
     def execute(self, context):
         objects = bpy.context.selected_objects
-        #objects.sort(reverse=True) # need iteration by names, not objs
         for obj in objects:
             obj.location[2] += random.uniform(context.scene.min_shift, context.scene.max_shift)
             mod = obj.modifiers.get("Solidify")
@@ -43,26 +27,26 @@ class SORT_MOD_OT_sort_mod(bpy.types.Operator):
 
 
 # UI panel
-class VIEW3D_PT_sort_mod(bpy.types.Panel):
+class VIEW3D_PT_Random_Heigher(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'Tool'
-    bl_label = 'SortMod'
+    bl_label = 'RandomHeigher'
 
     def draw(self, context):
         col = self.layout.column()
 
         col.prop(bpy.context.scene, 'min_shift')
         col.prop(bpy.context.scene, 'max_shift')
-        col.operator('mesh.sort_mod', text='Sort and Mod')
+        col.operator('mesh.random_heigher', text='RandomHeigher')
 
         
 
 ##
 
 blender_classes = [
-    SORT_MOD_OT_sort_mod,
-    VIEW3D_PT_sort_mod,
+    Random_Heigher_OT,
+    VIEW3D_PT_Random_Heigher,
 ]
 
 ## 
