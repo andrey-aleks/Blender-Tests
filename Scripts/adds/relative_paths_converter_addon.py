@@ -20,7 +20,6 @@ class Relative_Path_Converter_OT(bpy.types.Operator):
     def execute(self, context):
         abs_filepath =  context.edit_image.filepath
         #parent_path = Path (abs_filepath).parent.absolute()
-        #print(parent_path)
         #context.edit_image.filepath = bpy.path.relpath(abs_filepath, parent_path.parent.absolute())
         context.edit_image.filepath = bpy.path.relpath(abs_filepath)
         return {'FINISHED'}
