@@ -11,10 +11,10 @@ import bpy
 from pathlib import Path
 
 # Main operator 
-class Relative_Path_Converter_OT(bpy.types.Operator):
+class IMAGE_OT_Relative_Path_Converter(bpy.types.Operator):
     bl_idname = 'image.relative_path_converter'
-    bl_label = "RelativePathConverter"
-    bl_description = "Converts image's absolute path to relative path"
+    bl_label = 'RelativePathConverterOT'
+    bl_description = 'Converts image\'s absolute path to relative path'
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -30,7 +30,7 @@ class IMAGE_EDITOR_PT_Relative_Path_Converter(bpy.types.Panel):
     bl_space_type = 'IMAGE_EDITOR'
     bl_region_type = 'UI'
     bl_category = 'Image'
-    bl_label = 'RelativePathConverter'
+    bl_label = 'RelativePathConverterPT'
 
     def draw(self, context):
         col = self.layout.column()
@@ -41,7 +41,7 @@ class IMAGE_EDITOR_PT_Relative_Path_Converter(bpy.types.Panel):
 ##
 
 blender_classes = [
-    Relative_Path_Converter_OT,
+    IMAGE_OT_Relative_Path_Converter,
     IMAGE_EDITOR_PT_Relative_Path_Converter,
 ]
 
