@@ -1,5 +1,5 @@
 bl_info = {
-    "name": "RelativePathConverter",
+    "name": "Relative Path Converter",
     "version": (1, 0, 0),
     "blender": (2, 90, 3),
     "author": "Andrey Alekseev",
@@ -10,7 +10,7 @@ bl_info = {
 import bpy
 from pathlib import Path
 
-
+# Main operator 
 class Relative_Path_Converter_OT(bpy.types.Operator):
     bl_idname = 'image.relative_path_converter'
     bl_label = "RelativePathConverter"
@@ -26,7 +26,7 @@ class Relative_Path_Converter_OT(bpy.types.Operator):
 
 
 # UI panel
-class VIEW3D_PT_Relative_Path_Converter(bpy.types.Panel):
+class IMAGE_EDITOR_PT_Relative_Path_Converter(bpy.types.Panel):
     bl_space_type = 'IMAGE_EDITOR'
     bl_region_type = 'UI'
     bl_category = 'Image'
@@ -42,7 +42,7 @@ class VIEW3D_PT_Relative_Path_Converter(bpy.types.Panel):
 
 blender_classes = [
     Relative_Path_Converter_OT,
-    VIEW3D_PT_Relative_Path_Converter,
+    IMAGE_EDITOR_PT_Relative_Path_Converter,
 ]
 
 ## 
